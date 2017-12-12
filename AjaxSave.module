@@ -1,0 +1,102 @@
+<?php namespace ProcessWire;
+
+/**
+ * ProcessWire AjaxSave Proof of concept
+ *
+ * ProcessWire 2.x
+ * Copyright (C) 2010 by Ryan Cramer
+ * Licensed under GNU/GPL v2, see LICENSE.TXT
+ *
+ * http://www.processwire.com
+ * http://www.ryancramer.com
+ *
+ */
+
+class AjaxSave extends WireData implements Module, ConfigurableModule {
+
+    protected static $defaults = array(
+    		'ajax_button_text' => 'Apply'
+        );
+
+    /**
+     * getModuleInfo is a module required by all modules to tell ProcessWire about them
+     *
+     * @return array
+     *
+     */
+    public static function getModuleInfo() {
+
+        return array(
+            'title' => 'Ajax Save',
+            'version' => 12,
+            'summary' => __('Ajax save(without reload) for pages in admin.'),
+            'href' => '',
+            'author' => "AutoSave by Philipp 'Soma' Urlich, reworked to AjaxSave by Bernd 'Klenkes' Klenk",
+            'singular' => true,
+            'autoload' => "template=admin",
+            'installs' => array("ProcessAjaxSave"),
+            );
+    }
+
+
+    public function init() {
+        $this->addHookAfter("ProcessPageEdit::buildForm", $this, "addAjaxSaveButton");
+    }
+
+
+    public function addAjaxSaveButton(HookEvent $event) {
+     
+        $form       = $event->return;
+
+        $f          = $f2 = $this->modules->InputfieldButton;// button top and bottom of edit page
+        $f->attr("id+name", "ajax_save");
+        $f->attr("value", $this->get('ajax_button_text'));// button text from config
+
+        $f2->attr("id+name", "ajax_save");
+        $f2->attr("value", $buttontext);
+        $f2->class .= ' ui-priority-secondary head_button_clone';
+        $f->attr('href',$href);
+        $f2->attr('href',$href);
+
+        // insert button top and bottom of edit page(top will _copy)
+        $form->insertAfter($f, $form->get("submit_save"));
+        $form->insertAfter($f2, $form->get("submit_save"));
+
+    }
+
+
+    public function ready(){
+        $this->addHookAfter("ProcessPageEdit::execute", $this, "addScripts");
+    }
+
+
+    public function addScripts(HookEvent $event){
+        $page = $event->object->getPage();
+        $this->config->scripts->add($this->config->urls->AjaxSave . "AjaxSave.js");
+        $this->config->styles->add($this->config->urls->AjaxSave . "AjaxSave.css");
+    }
+
+
+    /**
+     * get the config either default or overwritten by user config
+     * @param  string $key name of the option
+     * @return mixed      return requested option value
+     */
+    public function getConfig($key) { }
+
+
+    public static function getModuleConfigInputfields(array $data) {
+        $data = array_merge(self::$defaults, $data);
+        $inputfields = new InputfieldWrapper();
+
+        $f = wire("modules")->InputfieldText;
+        $f->attr("name", "ajax_button_text");
+        $f->attr("size", "25");
+        $f->label = __("Choose a text for the button. Default will be: Apply");
+        $f->attr("value", $data["ajax_button_text"]);
+        $inputfields->add($f);
+
+        return $inputfields;
+    }
+
+}
