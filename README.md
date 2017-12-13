@@ -8,7 +8,7 @@ This module adds a news button "Apply" which saves the page via ajax when editin
 
 ## Requirements
 
-ProcessWire 3+ with namespace
+ProcessWire 3+ with namespace (but should work on PW 2+ too)
 
 ## Known Issues
 
@@ -24,3 +24,8 @@ This module is currently a proof of concept.
 
 Thanks to Apeisa and his great Fredi font-end module, from where some logic is borrowed to save the page via ajax.
 Thanks to Philipp 'Soma' Urlich for the original AutoSave based on Apeisas code.
+
+## 0.1.3
+- Removed useless generation of second button
+- Removed more leftover code
+- Added a default value for button text

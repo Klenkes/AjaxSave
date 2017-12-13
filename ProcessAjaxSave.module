@@ -28,7 +28,6 @@ class ProcessAjaxSave extends Process {
             'title' => 'Process Ajax Save',
             'version' => 13,
             'summary' => __('Ajax save(without reload) for pages in admin.'),
-            'href' => '',
             'author' => "AutoSave by Philipp 'Soma' Urlich, reworked to AjaxSave by Bernd 'Klenkes' Klenk",
             'singular' => true,
             'autoload' => false,
@@ -51,7 +50,7 @@ class ProcessAjaxSave extends Process {
 
             $this->pageId = (int) $this->input->post("id");
             $this->pageContext = $this->pages->get($this->pageId);
-            $this->pageContext->setTrackChanges(true);
+            $this->pageContext->setTrackChanges(true);// not sure this is needed, what does it do? Leftover from AutoSave?
 
             $this->pageEdit = $this->modules->get("ProcessPageEdit");
 

@@ -28,9 +28,8 @@ class AjaxSave extends WireData implements Module, ConfigurableModule {
 
         return array(
             'title' => 'Ajax Save',
-            'version' => 12,
+            'version' => 13,
             'summary' => __('Ajax save(without reload) for pages in admin.'),
-            'href' => '',
             'author' => "AutoSave by Philipp 'Soma' Urlich, reworked to AjaxSave by Bernd 'Klenkes' Klenk",
             'singular' => true,
             'autoload' => "template=admin",
@@ -47,20 +46,17 @@ class AjaxSave extends WireData implements Module, ConfigurableModule {
     public function addAjaxSaveButton(HookEvent $event) {
      
         $form       = $event->return;
+        
+        // check if config has a value for the buttontext, otherwise dafault to Apply
+        $buttontext = $this->get('ajax_button_text') ? $this->get('ajax_button_text') : 'Apply';
 
-        $f          = $f2 = $this->modules->InputfieldButton;// button top and bottom of edit page
+        $f = $this->modules->InputfieldButton;// button top and bottom of edit page
         $f->attr("id+name", "ajax_save");
-        $f->attr("value", $this->get('ajax_button_text'));// button text from config
-
-        $f2->attr("id+name", "ajax_save");
-        $f2->attr("value", $buttontext);
-        $f2->class .= ' ui-priority-secondary head_button_clone';
-        $f->attr('href',$href);
-        $f2->attr('href',$href);
+        $f->attr("value", $buttontext);
+        $f->class .= ' ui-priority-secondary head_button_clone';
 
         // insert button top and bottom of edit page(top will _copy)
         $form->insertAfter($f, $form->get("submit_save"));
-        $form->insertAfter($f2, $form->get("submit_save"));
 
     }
 
@@ -92,8 +88,8 @@ class AjaxSave extends WireData implements Module, ConfigurableModule {
         $f = wire("modules")->InputfieldText;
         $f->attr("name", "ajax_button_text");
         $f->attr("size", "25");
+        $f->attr('value', $data['ajax_button_text'] ? $data['ajax_button_text'] : 'Apply'); 
         $f->label = __("Choose a text for the button. Default will be: Apply");
-        $f->attr("value", $data["ajax_button_text"]);
         $inputfields->add($f);
 
         return $inputfields;

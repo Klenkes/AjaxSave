@@ -10,7 +10,7 @@
         $("body").append($message);
         $("body").append($error);
 
-        $("#Inputfield_ajax_save, #Inputfield_ajax_save_copy").click(function(event) {
+        $("#ajax_save, #ajax_save_copy").click(function(event) {
             event.preventDefault();
 
             if(window.tinyMCE !== undefined){
