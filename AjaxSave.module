@@ -29,7 +29,7 @@ class AjaxSave extends WireData implements Module, ConfigurableModule {
         return array(
             'title' => 'Ajax Save',
             'version' => 13,
-            'summary' => __('Ajax save(without reload) for pages in admin.'),
+            'summary' => __('NUR ADMIN. Ajax save(without reload) for pages in admin.'),
             'author' => "AutoSave by Philipp 'Soma' Urlich, reworked to AjaxSave by Bernd 'Klenkes' Klenk",
             'singular' => true,
             'autoload' => "template=admin",
@@ -39,7 +39,10 @@ class AjaxSave extends WireData implements Module, ConfigurableModule {
 
 
     public function init() {
-        $this->addHookAfter("ProcessPageEdit::buildForm", $this, "addAjaxSaveButton");
+        // Achtung! Sollte auf bestimmte Aktionen beschränkt werden! Keine User oder Roles...
+        if($this->wire('user')->isSuperuser()){
+          $this->addHookAfter("ProcessPageEdit::buildForm", $this, "addAjaxSaveButton");
+        }
     }
 
 
@@ -55,8 +58,10 @@ class AjaxSave extends WireData implements Module, ConfigurableModule {
         $f->attr("value", $buttontext);
         $f->class .= ' ui-priority-secondary head_button_clone';
 
-        // insert button top and bottom of edit page(top will _copy)
+        //  ONLY IF there is a SAVE button(otherwise errors) insert button top and bottom of edit page(top will be _copy)
+        if($form->get("submit_save")){
         $form->insertAfter($f, $form->get("submit_save"));
+        }
 
     }
 
