@@ -1,6 +1,7 @@
-# AjaxSave beta
+# AjaxSave(beta) for CMF/CMS ProcessWire
 
-This module adds a news button "Apply" which saves the page via ajax when editing in the admin so the page doesn't reload.
+This module adds a new button "Apply" which saves the page via ajax when editing in the admin so the page doesn't have to reload, and you stay where you are in tge page.
+With the regular Save button you have to navigate back to your place of work, which can be annoying with a huge amount of fields.
 
 - Configurable button text
 - So far it seems to work fine for all fields and supports multilanguage.
